@@ -1,0 +1,220 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prasanth's</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles:wght@400;700&family=Poppins:wght@200&family=Prompt:wght@300;400&family=Saira:wght@300;700&display=swap" rel="stylesheet">
+<style>
+    body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(to right, #c6ffdd, #fbd786, #c6ffdd);
+    font-family: 'Prompt', sans-serif;
+}
+
+.circleframe{
+    width: 8rem;
+    height: 8rem;
+    border: 8px solid #F2F2F2;
+    border-radius:50%;
+    margin-top: -5rem;
+}
+
+.flexCenter{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.card{
+    width: 400px;
+    border-radius: 25px;
+    background-color: #F2F2F2;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    height: 76%;
+    min-height: 50vh;
+}
+
+.content{
+    border-radius: 25px;
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.imageContainer{
+    width: 100%;
+    background-color: #F2F2F2;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+
+h3{
+    font-size: 25px;
+    text-transform: uppercase;
+}
+
+.rollnumber  , .email, .password{
+    height: 50px;
+    padding-left: 2rem;
+    border-radius: 25px;
+    border: 1px solid black;
+    width: 80%;
+    font-size: 1rem;
+    margin: 10px 10px;
+}
+.password
+{
+    margin-bottom: 40px;
+}
+.signin , .login{
+    border-radius: 25px;
+    height: 50px;
+    border: none;
+    background-color: #FAD610;
+    width: 80%;
+    color: #fff;
+    font-weight: 500;
+    font-size: 20px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    cursor: pointer;
+    margin-bottom: 10px;
+
+}
+
+.signin:active , .login:active {
+    transform: scale(0.98);
+}
+
+a{
+    text-decoration: none;
+    color: grey;
+    margin: 1rem 0rem;
+}
+    
+</style>
+</head>
+<body>
+    <div class="card">
+        <div class="imageContainer flexCenter">
+            <img class="circleframe" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7ZJ3tIrWG15YiMXo_WB_B1bNsMc_UDcQp1c-Jz1Lojw&s" alt="profile"/>
+            <h3>Login</h3>
+        </div>
+        <div class="content">
+            <input class="rollnumber" type="text" placeholder="Roll Number" name="your-roll" />
+            <input class="email" type="email" placeholder="E-mail" name="your-mail" />
+            <input class="password" type="password" placeholder="Password" name="your-pass" />
+            <button class="signin" onclick="window.location.href='2.signuppage.html'">Sign up</button>
+            <button class="login" onclick="login()">Login</button>
+            <a href="#">Forgot password?</a>
+        </div>
+    </div>
+
+    <script>
+
+        //Checking
+        function areObjectsEqual(obj1, obj2) {
+            // Check if the number of keys are the same
+            const keys1 = Object.keys(obj1);
+            const keys2 = Object.keys(obj2);
+        
+            if (keys1.length !== keys2.length) {
+                return false;
+            }
+        
+            // Check if all keys and values match
+            for (const key of keys1) {
+                if (obj1[key] !== obj2[key]) {
+                    return false;
+                }
+            }
+        
+            return true;
+        }
+    
+    function login()
+    {
+    
+            //User Entered data for login
+            let l_Roll = document.querySelector('.rollnumber').value
+            let l_Email = document.querySelector('.email').value
+            let l_Password = document.querySelector('.password').value
+            //console.log(l_Roll,l_Email,l_Password)
+
+            let l_user_array = []
+            let l_user = new Object()
+
+            l_user.Roll = l_Roll
+            l_user.Email = l_Email 
+            l_user.Password = l_Password
+
+            console.log("User entered for login:",l_user)
+    
+    
+            //Data From Sheets
+            let sheet_id = '1IBAcgXjGW3HK4ZSnHdYr6pZG2MQFabeSNSYva9KNdUM'
+            let sheet_tit = 'Player_Titles'
+            let sheet_range = 'A2:z'
+    
+        let Full_URL = ('https://docs.google.com/spreadsheets/d/' + sheet_id + '/gviz/tq?sheet=' + sheet_tit + '&range=' + sheet_range);
+         fetch(Full_URL)
+        .then(res => res.text())
+        .then(rep => {
+        let data = JSON.parse(rep.substr(47).slice(0, -2));
+        let d = data.table.rows
+        console.log("Data from sheets (full):",d)
+        console.log("Length:",d.length)
+
+//Saving Data to the script
+let D_Array = []
+
+       for (let i = 0; i < d.length; i++)
+        { 
+           let D_Obj = 
+           {
+            Roll :  String(data.table.rows[i].c[0].v),
+            Email :  String(data.table.rows[i].c[1].v),
+            Password : String(data.table.rows[i].c[2].f || data.table.rows[i].c[2].v) 
+           }
+           D_Array.push(D_Obj)
+        }
+        console.log('Data_Array:',D_Array) 
+
+
+//Allow user to login and goes to home page
+let found = false; // Track if a match is found
+let i = 0;
+
+while (i < D_Array.length) {
+    if (areObjectsEqual(l_user, D_Array[i])) {
+        window.location.href = '3.userpage.html';
+        found = true;
+        break; // Exit the loop as soon as a match is found
+    }
+    i++;
+}
+
+if (!found) {
+    alert('Check first'); // Alert if no match was found after the loop ends
+}
+
+
+
+
+})
+.catch(error => console.error('Error:', error)); 
+
+        //verifying user:
+
+        
+        
+    }
+    </script>
+</body>
+</html>
